@@ -27,5 +27,9 @@ router.post('/check-status', checkStatus, usuarioController.renewToken);
 
 router.get('/', usuarioController.getUsuarios);
 
+router.get('/admin/:uid', usuarioController.hacerAdmin);
+
+router.get('/user/:uid', usuarioController.hacerUser);
+
 
 module.exports = router;

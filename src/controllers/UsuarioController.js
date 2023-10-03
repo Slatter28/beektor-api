@@ -141,12 +141,63 @@ const getUsuarios = async (req, res) => {
 }
 
 
+const hacerAdmin = async (req, res) => {
+
+    const { uid } = req.params;
+
+    const usuario = await Usuario.findById(uid);
+
+    if (!usuario) {
+        return res.status(404).json({
+            ok: false,
+            msg: 'No existe un usuario con ese id.'
+        });
+    }
+
+    usuario.rol = 'ADMIN_ROLE';
+
+    await usuario.save();
+
+    res.json({
+        ok: true,
+        usuario
+    });
+
+}
+
+
+const hacerUser = async (req, res) => {
+
+    const { uid } = req.params;
+
+    const usuario = await Usuario.findById(uid);
+
+    if (!usuario) {
+        return res.status(404).json({
+            ok: false,
+            msg: 'No existe un usuario con ese id.'
+        });
+    }
+
+    usuario.rol = 'USER_ROLE';
+
+    await usuario.save();
+
+    res.json({
+        ok: true,
+        usuario
+    });
+
+}
+
 module.exports = {
     crearUsuario,
     loginUsuario,
     revalidarToken,
     renewToken,
-    getUsuarios
+    getUsuarios,
+    hacerAdmin,
+    hacerUser
 }
 
 

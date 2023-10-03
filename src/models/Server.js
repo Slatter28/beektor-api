@@ -29,6 +29,7 @@ class Server {
             proveedores: "/api/proveedores",
             colmenas: "/api/colmenas",
             sensores: "/api/sensores",
+            dashboard: "/api/dashboard"
         };
 
         this.middlewares();
@@ -77,6 +78,7 @@ class Server {
         this.app.use(this.paths.proveedores, require("../routes/ProveedorRoutes"));
         this.app.use(this.paths.colmenas, require("../routes/ColmenaRoutes"));
         this.app.use(this.paths.sensores, require("../routes/SensoresRoutes"));
+        this.app.use(this.paths.dashboard, require("../routes/DashboardRoutes"));
 
     }
 
