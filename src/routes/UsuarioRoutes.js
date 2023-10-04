@@ -31,5 +31,7 @@ router.get('/admin/:uid', usuarioController.hacerAdmin);
 
 router.get('/user/:uid', usuarioController.hacerUser);
 
+router.get('/readAllUsers', usuarioController.readAllUsers);
+
 
 module.exports = router;

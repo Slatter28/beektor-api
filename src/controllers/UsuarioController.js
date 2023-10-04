@@ -3,12 +3,53 @@ const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/JWT');
 const jwt = require('jsonwebtoken');
 
+const { db, Table } = require('../config/dbDynamo');
+
+
+const readAllUsers = async (req, res) => {
+    const params = {
+        TableName: Table
+    }
+
+    try {
+        const { usuarios = [] } = await db.scan(params).promise();
+
+        res.json({
+            ok: true,
+            usuarios
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador.'
+        });
+    }
+
+}
+
+// const createOrUpdate = async (data = {}) => {
+//     const params = {
+//         TableName: Table,
+//         Item: data
+//     }
+
+//     try {
+//         await db.put(params).promise()
+//         return { success: true }
+//     } catch (error) {
+//         return { success: false }
+//     }
+// }
 
 const crearUsuario = async (req, res) => {
 
     try {
         const { usuario, correo, contrasena, rol } = req.body;
         let findUsuario = await Usuario.findOne({ correo });
+
 
         if (findUsuario) {
             return res.status(400).json({
@@ -29,7 +70,22 @@ const crearUsuario = async (req, res) => {
 
         await newUsuario.save();
 
+        const params = {
+            TableName: Table,
+            Item: {
+                _id: newUsuario._id.toString(),
+                usuario: newUsuario.usuario,
+                correo: newUsuario.correo,
+                contrasena: newUsuario.contrasena,
+                rol: newUsuario.rol
+            }
+        }
+
+        await db.put(params).promise();
+
         const token = await generarJWT(newUsuario.id);
+
+
 
         res.status(201).json({
             ok: true,
@@ -158,6 +214,19 @@ const hacerAdmin = async (req, res) => {
 
     await usuario.save();
 
+    const params = {
+        TableName: Table,
+        Item: {
+            _id: usuario._id.toString(),
+            usuario: usuario.usuario,
+            correo: usuario.correo,
+            contrasena: usuario.contrasena,
+            rol: usuario.rol
+        }
+    }
+
+    await db.put(params).promise();
+
     res.json({
         ok: true,
         usuario
@@ -183,6 +252,19 @@ const hacerUser = async (req, res) => {
 
     await usuario.save();
 
+    const params = {
+        TableName: Table,
+        Item: {
+            _id: usuario._id.toString(),
+            usuario: usuario.usuario,
+            correo: usuario.correo,
+            contrasena: usuario.contrasena,
+            rol: usuario.rol
+        }
+    }
+
+    await db.put(params).promise();
+
     res.json({
         ok: true,
         usuario
@@ -197,7 +279,8 @@ module.exports = {
     renewToken,
     getUsuarios,
     hacerAdmin,
-    hacerUser
+    hacerUser,
+    readAllUsers
 }
 
 
