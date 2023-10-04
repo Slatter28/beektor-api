@@ -9,9 +9,7 @@ AWS.config.update({
 
 const db = new AWS.DynamoDB.DocumentClient()
 
-const Table = 'usuarios'
 
 module.exports = {
-    db,
-    Table
+    db
 }

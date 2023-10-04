@@ -59,7 +59,7 @@ const getLastSensorByColmena = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const sensor = await sensoresModels.findOne({ colmena: id }).sort({ _id: -1 });
+        const sensor = await sensoresModels.findOne({ colmena: id }).sort({ _id: -1 }).populate("colmena");
 
         res.json(sensor);
     } catch (error) {

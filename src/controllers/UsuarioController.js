@@ -3,12 +3,12 @@ const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/JWT');
 const jwt = require('jsonwebtoken');
 
-const { db, Table } = require('../config/dbDynamo');
+const { db } = require('../config/dbDynamo');
 
 
 const readAllUsers = async (req, res) => {
     const params = {
-        TableName: Table
+        TableName: 'usuarios'
     }
 
     try {
@@ -71,7 +71,7 @@ const crearUsuario = async (req, res) => {
         await newUsuario.save();
 
         const params = {
-            TableName: Table,
+            TableName: 'usuarios',
             Item: {
                 _id: newUsuario._id.toString(),
                 usuario: newUsuario.usuario,
@@ -215,7 +215,7 @@ const hacerAdmin = async (req, res) => {
     await usuario.save();
 
     const params = {
-        TableName: Table,
+        TableName: 'usuarios',
         Item: {
             _id: usuario._id.toString(),
             usuario: usuario.usuario,
@@ -253,7 +253,7 @@ const hacerUser = async (req, res) => {
     await usuario.save();
 
     const params = {
-        TableName: Table,
+        TableName: 'usuarios',
         Item: {
             _id: usuario._id.toString(),
             usuario: usuario.usuario,
